@@ -1,11 +1,11 @@
 # SQL-RFM-Analysis
 
-Overview
-* The SQL-RFM-Analysis project focuses on implementing a Recency, Frequency, and Monetary (RFM) analysis using SQL to assess customer behavior and segmentation. This analysis is a powerful tool for identifying high-value customers, understanding purchasing patterns, and tailoring business strategies accordingly. The dataset used in this project is entirely fictional and has been generated for demonstration purposes only.
+## Overview
+**SQL-RFM-Analysis** is a project designed to implement Recency, Frequency, and Monetary (RFM) analysis using SQL to evaluate customer behavior and segmentation.  
+RFM analysis is a powerful tool for identifying high-value customers, understanding purchasing patterns, and guiding effective business strategies.  
+For demonstration purposes, an entirely **fictional dataset** has been generated and used throughout this project.
 
-Entity-Relationship Diagram (ERD)
-Below is the ERD illustrating the relationships between the tables:
+## Entity-Relationship Diagram (ERD)
+Below is the ERD showing the relationships between the tables:
+
 ![ERD Diagram](./sales_analysis_ERD.png)
-
-
-

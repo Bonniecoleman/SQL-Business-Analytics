@@ -7,4 +7,4 @@ For demonstration purposes, an entirely **synthetic dataset** has been generated
 
 ## Entity-Relationship Diagram (ERD)
 Below is the ERD showing the relationships between the tables:
-![ERD Diagram](./sales_analysis_ERD.png)
+![ERD Diagram](./ERD.png)

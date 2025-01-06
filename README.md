@@ -8,5 +8,3 @@ The **Customer Value and Growth Project** focuses on analyzing customer behavior
 - **RFM Analysis**: Segments customers based on Recency, Frequency, and Monetary (RFM) values to emphasize high-value customers and inform targeted retention strategies.
 - **Purchase Cycle Analysis**: Analyzes customer purchase frequency and intervals to optimize marketing and engagement strategies.
 - **Product Growth Rate Analysis**: Evaluates category and brand performance to identify growth opportunities and optimize product offerings.
-
-This project utilizes a **synthetic dataset** to conduct how SQL can be applied in real-world business scenarios.

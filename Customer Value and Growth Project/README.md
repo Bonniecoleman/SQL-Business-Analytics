@@ -96,3 +96,81 @@ ORDER BY GENDER, AGE_GROUP, PURCHASE_STATUS;
 ##### For Women:
 - The **30s** age group displayed a stark contrast with **656 customers not purchasing**, while only **100 customers made purchases**.
 ![](./data/age_group.png)
+
+___
+## 2. RFM Analysis
+
+### Objective
+To segment customers based on their Recency, Frequency, and Monetary (RFM) values to identify key customer groups and analyze their contribution to the business.
+
+---
+### Data Mart for RFM Analysis
+```sql
+CREATE TABLE RFM AS 
+SELECT A.*, B.TOTAL_SPEND, B.PURCHASE_COUNT
+FROM CUSTOMER AS A
+LEFT JOIN (SELECT A.MEM_NO, SUM(A.SALES_QTY * B.PRICE) AS TOTAL_SPEND, COUNT(A.ORDER_NO) AS PURCHASE_COUNT
+FROM SALES AS A
+LEFT JOIN PRODUCT AS B
+ON A.PRODUCT_CODE = B.PRODUCT_CODE
+WHERE YEAR(A.ORDER_DATE) = '2020'
+GROUP BY A.MEM_NO) AS B
+ON A.MEM_NO = B.MEM_NO;
+```
+
+#### 2.1 Number of Customers by RFM Segmentation
+```sql
+SELECT  SEGMENTATION, COUNT(MEM_NO) AS NUM_CUSTOMER
+  FROM  (SELECT *
+		,CASE WHEN TOTAL_SPEND >  5000000 THEN 'VIP Customer'
+			  WHEN TOTAL_SPEND >  1000000 OR PURCHASE_COUNT > 3 THEN 'Premium Customer'
+		      WHEN TOTAL_SPEND >        0 THEN 'Regular Customer'
+			  ELSE 'Potential Customer' END AS SEGMENTATION
+		FROM  RFM)AS A
+GROUP BY  SEGMENTATION
+ORDER BY  NUM_CUSTOMER ASC;
+```
+#### Insights
+- **Potential Customers** represent the largest group, with **1,860 customers**, indicating a **high untapped potential**.
+- **Regular Customers** (**576**) and **Premium Customers** (**187**) make up the mid-tier segments.
+- **VIP Customers** (**38**) are the smallest yet **high-value segment**.
+![](./data/segmentation.png)
+
+#### 2.2 Revenue by RFM Segmentation
+```sql
+SELECT  SEGMENTATION, SUM(TOTAL_SPEND) AS TOTAL_SPEND
+  FROM  (SELECT  *
+		,CASE WHEN TOTAL_SPEND >  5000000 THEN 'VIP'
+			  WHEN TOTAL_SPEND >  1000000 OR PURCHASE_COUNT > 3 THEN 'Premium Customer'
+			  WHEN TOTAL_SPEND >        0 THEN 'Regular Customer'
+			  ELSE 'Potential Customer' END AS SEGMENTATION
+		 FROM  RFM) AS A
+GROUP BY  SEGMENTATION
+ORDER BY  TOTAL_SPEND DESC;
+```
+#### Insights
+- **VIP Customers** generate the **highest revenue**, contributing **40% of the total spend** with **410,213,000 units**.
+- **Premium Customers** follow closely, accounting for **38% of revenue**.
+- **Regular Customers** contribute the remaining **22%**.
+- **Potential Customers** currently do **not contribute to revenue**, highlighting an **opportunity to engage and convert** this segment.
+![](./data/revenue.png)
+
+#### 2.3 Average Revenue per Customer by RFM Segmentation
+```sql
+SELECT  SEGMENTATION, SUM(TOTAL_SPEND) / COUNT(MEM_NO) AS AVG_REV_PER_CUSTOMER
+	FROM  (SELECT  *
+		,CASE WHEN TOTAL_SPEND >  5000000 THEN 'VIP'
+			  WHEN TOTAL_SPEND >  1000000 OR PURCHASE_COUNT > 3 THEN 'Premium Customer'
+			  WHEN TOTAL_SPEND >        0 THEN 'Regular Customer'
+			  ELSE 'Potential Customer' END AS SEGMENTATION
+		 FROM  RFM) AS A
+GROUP BY  SEGMENTATION
+ORDER BY  AVG_REV_PER_CUSTOMER DESC;
+```
+#### Insights
+
+- **VIP Customers** have the **highest average revenue per customer** at **10,795,079**, demonstrating their **substantial value** to the business.
+- **Premium Customers** generate an average of **2,045,267**.
+- **Regular Customers** contribute **381,832 per person**.
+- **Potential Customers** currently generate **no revenue**, reinforcing the **need for targeted marketing strategies**.
+![](./data/average_revenue.png)

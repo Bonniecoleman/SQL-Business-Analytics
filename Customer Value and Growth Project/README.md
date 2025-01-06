@@ -174,3 +174,75 @@ ORDER BY  AVG_REV_PER_CUSTOMER DESC;
 - **Regular Customers** contribute **381,832 per person**.
 - **Potential Customers** currently generate **no revenue**, reinforcing the **need for targeted marketing strategies**.
 ![](./data/average_revenue.png)
+
+___
+## 3. Repurchase Rate and Purchase Cycle Analysis
+
+### Objective
+To analyze customer repurchase behavior and evaluate purchase cycles to understand customer retention and buying patterns.
+
+---
+### Data Mart for Repurchase Rate and Purchase Cycle Analysis
+```sql
+CREATE TABLE purchase_cycle AS
+SELECT  *
+        ,CASE WHEN DATE_ADD(FIRST_PUR_DATE, INTERVAL +1 DAY) <= LAST_PUR_DATE THEN 'Y' ELSE 'N' END AS REPUR_STATUS
+        ,DATEDIFF(LAST_PUR_DATE, FIRST_PUR_DATE) AS PUR_INTERVAL
+        ,CASE WHEN PUR_COUNT - 1 = 0 OR DATEDIFF(LAST_PUR_DATE, FIRST_PUR_DATE) = 0 THEN 0
+              ELSE DATEDIFF(LAST_PUR_DATE, FIRST_PUR_DATE) / (PUR_COUNT - 1) END AS PUR_CYCLE
+  FROM  (SELECT  MEM_NO
+                ,MIN(ORDER_DATE) AS FIRST_PUR_DATE        
+                ,MAX(ORDER_DATE) AS LAST_PUR_DATE
+                ,COUNT(ORDER_NO) AS PUR_COUNT
+          FROM  SALES
+         WHERE  MEM_NO <> '9999999' /* Exclude non-members */
+      GROUP BY  MEM_NO) AS A;
+```
+
+#### 3.1 Percentage of Repurchasing Customers (%)
+```sql
+SELECT  COUNT(DISTINCT MEM_NO) AS NUM_PUR_CUSTOMER
+		,COUNT(DISTINCT CASE WHEN REPUR_STATUS = 'Y' THEN MEM_NO END) AS NUM_REPUR_CUSTOMER
+  FROM  purchase_cycle;
+```
+#### Insights
+- Out of **1,202 purchasing customers**, **1,120 customers** made repurchases.
+- This results in a **93.2% repurchase rate**, indicating **strong customer retention**.
+![](./data/repurchase.png)
+
+#### 3.2 Average Purchase Cycle and Number of Customers by Purchase Cycle Interval
+```sql
+SELECT  AVG(PUR_INTERVAL)
+  FROM  purchase_cycle
+ WHERE  PUR_INTERVAL > 0;
+```
+
+```sql
+SELECT  *
+		,CASE WHEN PUR_INTERVAL <= 7 THEN 'Within 7 days'
+			  WHEN PUR_INTERVAL <= 14 THEN 'Within 14 days'
+			  WHEN PUR_INTERVAL <= 21 THEN 'Within 21 days'
+			  WHEN PUR_INTERVAL <= 28 THEN 'Within 28 days'
+			  ELSE 'After 29 days' END AS REPUR_INTERVAL
+  FROM  purchase_cycle
+ WHERE  PUR_INTERVAL > 0;
+```
+```sql
+ SELECT  REPUR_INTERVAL, COUNT(MEM_NO) AS NUM_CUSTOMER
+   FROM  (SELECT  *
+			,CASE WHEN PUR_INTERVAL <= 7 THEN 'Within 7 days'
+				  WHEN PUR_INTERVAL <= 14 THEN 'Within 14 days'
+				  WHEN PUR_INTERVAL <= 21 THEN 'Within 21 days'
+				  WHEN PUR_INTERVAL <= 28 THEN 'Within 28 days'
+				  ELSE 'After 29 days' END AS REPUR_INTERVAL
+		  FROM  purchase_cycle
+		 WHERE  PUR_INTERVAL > 0)AS A
+GROUP BY  REPUR_INTERVAL;
+```
+#### Insights
+- The **average purchase cycle** is **5.29 days**, demonstrating **frequent customer purchases**.
+- **Most customers (907)** repurchase within **7 days**, showing a strong tendency for quick repeat purchases.
+- The number of customers drops significantly for longer intervals:
+  - **167 customers** repurchase within **14 days**.
+  - Only **8 customers** repurchase after **29 days**.
+![](./data/interval.png)

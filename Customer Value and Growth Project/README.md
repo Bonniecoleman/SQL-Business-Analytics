@@ -46,7 +46,7 @@ SELECT A.*
 FROM CUSTOMER AS A
 LEFT
 JOIN (SELECT DISTINCT MEM_NO FROM SALES) AS B
-  ON A.MEM_NO = B.MEM_NO;
+  ON A.MEM_NO = B.MEM_NO;```
 
 
 #### 1.1 Number of Customers by Join Year-Month
@@ -57,4 +57,4 @@ JOIN (SELECT DISTINCT MEM_NO FROM SALES) AS B
       COUNT(customer_id) AS number_of_customers
   FROM customers
   GROUP BY join_year_month
-  ORDER BY join_year_month;
+  ORDER BY join_year_month;```

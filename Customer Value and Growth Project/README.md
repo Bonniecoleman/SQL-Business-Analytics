@@ -93,3 +93,4 @@ ORDER BY GENDER, AGE_GROUP, PURCHASE_STATUS;
 - The **30s** age group showed the highest "Not Purchased" count (**226**).
 ##### For Women:
 - The **30s** age group displayed a stark contrast with **656 customers not purchasing**, while only **100 customers made purchases**.
+![](./data/age_group.png)

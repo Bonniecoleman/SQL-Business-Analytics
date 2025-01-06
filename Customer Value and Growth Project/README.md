@@ -30,6 +30,7 @@ To analyze and define key characteristics of customers, such as demographics, sp
 
 ---
 ### Data Mart for Customer Profile Analysis
+```sql
 CREATE TABLE customer_profile AS
 SELECT A.*
 	   ,DATE_FORMAT(JOIN_DATE, "%Y-%m") AS JOIN_YEAR_MONTH

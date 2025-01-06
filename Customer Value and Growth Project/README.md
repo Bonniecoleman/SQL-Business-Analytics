@@ -246,3 +246,68 @@ GROUP BY  REPUR_INTERVAL;
   - **167 customers** repurchase within **14 days**.
   - Only **8 customers** repurchase after **29 days**.
 ![](./data/interval.png)
+
+___
+## 4. Product Growth Rate Analysis
+
+### Objective
+To evaluate the growth rate of purchase amounts by category and analyze purchase metrics by brand within specific category (Beauty).
+
+---
+### Data Mart for Product growth rate analysis
+```sql
+CREATE TABLE product_growth AS
+SELECT  A.MEM_NO, B.CATEGORY ,B.BRAND, A.SALES_QTY * B.PRICE AS PURCHASE_AMOUNT
+        ,CASE WHEN DATE_FORMAT(ORDER_DATE, '%Y-%m') BETWEEN '2020-01' AND '2020-03' THEN '2020_Q1'
+			  WHEN DATE_FORMAT(ORDER_DATE, '%Y-%m') BETWEEN '2020-04' AND '2020-06' THEN '2020_Q2'
+              END AS QUARTER
+  FROM  SALES AS A
+LEFT JOIN  PRODUCT AS B
+    ON  A.PRODUCT_CODE = B.PRODUCT_CODE
+ WHERE  DATE_FORMAT(ORDER_DATE, '%Y-%m') BETWEEN '2020-01' AND '2020-06';
+
+/* 1. Growth rate of purchase amount by category (2020-Q1 -> 2020-Q2) */
+SELECT  * ,2020_Q2_PURCHASE_AMOUNT / 2020_Q1_PURCHASE_AMOUNT -1 AS GROWTH_RATE
+  FROM  (SELECT  CATEGORY
+				,SUM(CASE WHEN QUARTER = '2020_Q1' THEN PURCHASE_AMOUNT END) AS 2020_Q1_PURCHASE_AMOUNT
+				,SUM(CASE WHEN QUARTER = '2020_Q2' THEN PURCHASE_AMOUNT END) AS 2020_Q2_PURCHASE_AMOUNT
+		 FROM  product_growth
+	 GROUP BY  CATEGORY) AS A
+ORDER BY 4 DESC;
+```
+
+#### 4.1 Growth rate of purchase amount by category (2020-Q1 -> 2020-Q2)
+```sql
+SELECT  * ,2020_Q2_PURCHASE_AMOUNT / 2020_Q1_PURCHASE_AMOUNT -1 AS GROWTH_RATE
+  FROM  (SELECT  CATEGORY
+				,SUM(CASE WHEN QUARTER = '2020_Q1' THEN PURCHASE_AMOUNT END) AS 2020_Q1_PURCHASE_AMOUNT
+				,SUM(CASE WHEN QUARTER = '2020_Q2' THEN PURCHASE_AMOUNT END) AS 2020_Q2_PURCHASE_AMOUNT
+		 FROM  product_growth
+	 GROUP BY  CATEGORY) AS A
+ORDER BY 4 DESC;
+```
+#### Insights
+- The **Beauty category** experienced the **highest growth rate** of **164%**, indicating a significant increase in purchases.
+- **Video Games** followed with a **101% growth rate**, reflecting **increased engagement** during this period.
+- Categories like **Health** showed a **negative growth rate (-3%)**, signaling a **decline in purchases**.
+![](./data/growth.png)
+
+#### 4.2 Purchase metrics by brand in the Beauty category
+```sql
+SELECT  BRAND
+        ,COUNT(DISTINCT MEM_NO) AS NUM_OF_CUSTOMERS
+        ,SUM(PURCHASE_AMOUNT) AS TOTAL_AMOUNT_PURCHASE
+        ,SUM(PURCHASE_AMOUNT) / COUNT(DISTINCT MEM_NO) AS PURCHASE_AMOUNT_PER_CUSTOMER
+  FROM  product_growth
+ WHERE  CATEGORY = 'beauty'
+GROUP BY  BRAND
+ORDER BY  4 DESC;
+```
+#### Insights
+- **Chanel** leads the Beauty category with:
+  - The **highest purchase amount per customer**: **761,538**.
+  - A total of **13 customers**, contributing **9,900,000** in total purchases.
+- **Tea Tree** ranks second with:
+  - A purchase amount per customer of **207,273** from **11 customers**.
+- Other brands like **Aveeno** and **Neutrogena** have **significantly lower purchase amounts per customer**, suggesting potential areas for **targeted marketing** or **customer engagement strategies**.
+![](./data/beauty.png)

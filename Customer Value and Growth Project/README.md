@@ -28,10 +28,14 @@ Below is the ERD showing the relationships between the tables:
 #### Objective
 To analyze and define key characteristics of customers, such as demographics, spending behavior, and engagement metrics.
 
-#### Key Questions and Answers:
-- **What is the distribution of customers by age group?**  
+---
+
+#### 1.1 Number of Customers by Join Year-Month
+- **SQL Code**:
   ```sql
-  SELECT age_group, COUNT(*) AS customer_count
+  SELECT 
+      DATE_FORMAT(join_date, '%Y/%m') AS join_year_month, 
+      COUNT(customer_id) AS number_of_customers
   FROM customers
-  GROUP BY age_group
-  ORDER BY customer_count DESC;
+  GROUP BY join_year_month
+  ORDER BY join_year_month;

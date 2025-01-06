@@ -72,5 +72,13 @@ FROM CUSTOMER_PROFILE
 GROUP BY GENDER, AGE_GROUP
 ORDER BY GENDER, AGE_GROUP;
 ```
+#### Insights
+##### Average Age
+- **Men**: 36.9 years  
+- **Women**: 35.1 years  
+---
+##### Gender and Age Group Distribution
+- Among **men**, the **40s** age group has the highest representation (**349 customers**).
+- Among **women**, the **30s** age group has the highest representation (**756 customers**), significantly outpacing other groups.
 
 #### 1.3 Number of Customers by Gender and Age Group (Including Purchase Status)

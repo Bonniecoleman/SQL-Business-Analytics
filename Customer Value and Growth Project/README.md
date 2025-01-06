@@ -29,6 +29,24 @@ Below is the ERD showing the relationships between the tables:
 To analyze and define key characteristics of customers, such as demographics, spending behavior, and engagement metrics.
 
 ---
+### Data Mart for Customer Profile Analysis
+CREATE TABLE customer_profile AS
+SELECT A.*
+	   ,DATE_FORMAT(JOIN_DATE, "%Y-%m") AS JOIN_YEAR_MONTH
+       ,2021 - YEAR(BIRTHDAY) + 1 AS AGE
+       ,CASE WHEN 2021 - YEAR(BIRTHDAY) + 1 < 20 THEN "10s and under"
+			 WHEN 2021 - YEAR(BIRTHDAY) + 1 < 30 THEN "20s"
+             WHEN 2021 - YEAR(BIRTHDAY) + 1 < 40 THEN "30s"
+             WHEN 2021 - YEAR(BIRTHDAY) + 1 < 50 THEN "40s"
+             ELSE "50s and above" END AS AGE_GROUP
+             
+	   ,CASE WHEN B.MEM_NO IS NOT NULL THEN "Purchased"
+			 ELSE "Not Purchased" END AS Purchase_Status 
+FROM CUSTOMER AS A
+LEFT
+JOIN (SELECT DISTINCT MEM_NO FROM SALES) AS B
+  ON A.MEM_NO = B.MEM_NO;
+
 
 #### 1.1 Number of Customers by Join Year-Month
 - **SQL Code**:

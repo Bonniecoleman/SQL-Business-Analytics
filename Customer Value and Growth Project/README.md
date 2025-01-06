@@ -55,8 +55,22 @@ SELECT JOIN_YEAR_MONTH, COUNT(MEM_NO) AS NUM_CUSTOMER
 FROM CUSTOMER_PROFILE
 GROUP BY JOIN_YEAR_MONTH;
 ```
-
-## Insights
+#### Insights
 - **October 2019** had the highest number of new customer sign-ups, with **312 customers**.
 - Customer acquisition showed **consistent growth** leading up to **December 2019**, with a **sharp peak** in late 2019.
 - A **slight decline** was observed after **March 2020**.
+
+#### 1.2 Average age by gender / Number of customers by gender and age group 
+```sql
+SELECT GENDER, AVG(AGE) AS AVG_AGE
+FROM CUSTOMER_PROFILE
+GROUP BY GENDER;
+```
+```sql
+SELECT GENDER, AGE_GROUP, COUNT(MEM_NO) AS NUM_CUSTOMER
+FROM CUSTOMER_PROFILE
+GROUP BY GENDER, AGE_GROUP
+ORDER BY GENDER, AGE_GROUP;
+```
+
+#### 1.3 Number of Customers by Gender and Age Group (Including Purchase Status)

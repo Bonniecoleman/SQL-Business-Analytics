@@ -46,15 +46,17 @@ SELECT A.*
 FROM CUSTOMER AS A
 LEFT
 JOIN (SELECT DISTINCT MEM_NO FROM SALES) AS B
-  ON A.MEM_NO = B.MEM_NO;```
-
+  ON A.MEM_NO = B.MEM_NO;
+```
 
 #### 1.1 Number of Customers by Join Year-Month
 - **SQL Code**:
   ```sql
-  SELECT 
-      DATE_FORMAT(join_date, '%Y/%m') AS join_year_month, 
-      COUNT(customer_id) AS number_of_customers
-  FROM customers
-  GROUP BY join_year_month
-  ORDER BY join_year_month;```
+SELECT JOIN_YEAR_MONTH, COUNT(MEM_NO) AS NUM_CUSTOMER
+FROM CUSTOMER_PROFILE
+GROUP BY JOIN_YEAR_MONTH;
+
+## Insights
+- **October 2019** had the highest number of new customer sign-ups, with **312 customers**.
+- Customer acquisition showed **consistent growth** leading up to **December 2019**, with a **sharp peak** in late 2019.
+- A **slight decline** was observed after **March 2020**.

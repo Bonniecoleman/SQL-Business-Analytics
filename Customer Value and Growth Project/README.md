@@ -55,6 +55,7 @@ JOIN (SELECT DISTINCT MEM_NO FROM SALES) AS B
 SELECT JOIN_YEAR_MONTH, COUNT(MEM_NO) AS NUM_CUSTOMER
 FROM CUSTOMER_PROFILE
 GROUP BY JOIN_YEAR_MONTH;
+``
 
 ## Insights
 - **October 2019** had the highest number of new customer sign-ups, with **312 customers**.

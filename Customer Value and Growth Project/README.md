@@ -59,6 +59,7 @@ GROUP BY JOIN_YEAR_MONTH;
 - **October 2019** had the highest number of new customer sign-ups, with **312 customers**.
 - Customer acquisition showed **consistent growth** leading up to **December 2019**, with a **sharp peak** in late 2019.
 - A **slight decline** was observed after **March 2020**.
+![](./data/year.png)
 
 #### 1.2 Average age by gender / Number of customers by gender and age group 
 ```sql
@@ -79,6 +80,7 @@ ORDER BY GENDER, AGE_GROUP;
 ##### Gender and Age Group Distribution
 - Among **men**, the **40s** age group has the highest representation (**349 customers**).
 - Among **women**, the **30s** age group has the highest representation (**756 customers**), significantly outpacing other groups.
+![](./data/average.png)
 
 #### 1.3 Number of Customers by Gender and Age Group (Including Purchase Status)
 ```sql

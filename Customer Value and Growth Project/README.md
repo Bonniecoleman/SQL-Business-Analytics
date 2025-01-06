@@ -51,11 +51,11 @@ JOIN (SELECT DISTINCT MEM_NO FROM SALES) AS B
 
 #### 1.1 Number of Customers by Join Year-Month
 - **SQL Code**:
-  ```sql
+```sql
 SELECT JOIN_YEAR_MONTH, COUNT(MEM_NO) AS NUM_CUSTOMER
 FROM CUSTOMER_PROFILE
 GROUP BY JOIN_YEAR_MONTH;
-``
+```
 
 ## Insights
 - **October 2019** had the highest number of new customer sign-ups, with **312 customers**.

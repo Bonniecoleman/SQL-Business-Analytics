@@ -81,3 +81,15 @@ ORDER BY GENDER, AGE_GROUP;
 - Among **women**, the **30s** age group has the highest representation (**756 customers**), significantly outpacing other groups.
 
 #### 1.3 Number of Customers by Gender and Age Group (Including Purchase Status)
+```sql
+SELECT GENDER, AGE_GROUP, PURCHASE_STATUS, COUNT(MEM_NO) AS NUM_CUSTOMER
+FROM CUSTOMER_PROFILE
+GROUP BY GENDER, AGE_GROUP, PURCHASE_STATUS
+ORDER BY GENDER, AGE_GROUP, PURCHASE_STATUS;
+```
+#### Insights
+##### For Men:
+- Most purchases were made by customers in the **20s** and **50+** age groups.
+- The **30s** age group showed the highest "Not Purchased" count (**226**).
+##### For Women:
+- The **30s** age group displayed a stark contrast with **656 customers not purchasing**, while only **100 customers made purchases**.
